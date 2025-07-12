@@ -17,13 +17,12 @@ try
     primesTimes = PrimeNumberCalculator.FindPrimes(count);
 
     int answer;
-    bool isFirstAttempt = true; // Флаг для отслеживания первой попытки
+    bool isFirstAttempt = true;
 
     do
     {
         if (isFirstAttempt)
         {
-            // Показываем полное меню только при первом вводе
             Console.WriteLine("\nКак вы хотите вывести результат?");
             Console.WriteLine("1 - в консоль");
             Console.WriteLine("2 - в файл");
@@ -31,14 +30,12 @@ try
         }
         else
         {
-            // При последующих попытках — только гневное сообщение
             Console.WriteLine("\nДЛЯ КОГО НАПИСАНО ТО? 1, 2 или 3?");
         }
 
         Console.Write("Ваш выбор: ");
         string input = Console.ReadLine();
-
-        // Проверяем, что ввод корректен
+        
         if (!int.TryParse(input, out answer)) 
         {
             isFirstAttempt = false;
