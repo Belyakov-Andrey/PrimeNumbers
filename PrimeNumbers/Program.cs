@@ -13,20 +13,57 @@ try
         return;
     }
     
-    var (primes, times) = PrimeNumberCalculator.FindPrimes(count);
-    
-    for (int i = 0; i < primes.Length; i++)
+    Dictionary<int, double> primesTimes = new Dictionary<int, double>();
+    primesTimes = PrimeNumberCalculator.FindPrimes(count);
+
+    int answer;
+    bool isFirstAttempt = true; // Флаг для отслеживания первой попытки
+
+    do
     {
-        Console.WriteLine($"{i + 1}. {primes[i]} (время: {PrimeNumberCalculator.CutTimeZero(times[i])} сек)");
-    }
+        if (isFirstAttempt)
+        {
+            // Показываем полное меню только при первом вводе
+            Console.WriteLine("\nКак вы хотите вывести результат?");
+            Console.WriteLine("1 - в консоль");
+            Console.WriteLine("2 - в файл");
+            Console.WriteLine("3 - завершить программу");
+        }
+        else
+        {
+            // При последующих попытках — только гневное сообщение
+            Console.WriteLine("\nДЛЯ КОГО НАПИСАНО ТО? 1, 2 или 3?");
+        }
 
-    double totalTime = 0;
-    foreach (var t in times) totalTime += t;
-    double avgTime = totalTime / count;
+        Console.Write("Ваш выбор: ");
+        string input = Console.ReadLine();
 
-    Console.WriteLine("\nИтоговая статистика:");
-    Console.WriteLine($"Суммарное время: {PrimeNumberCalculator.CutTimeZero(totalTime)} сек");
-    Console.WriteLine($"Среднее время: {PrimeNumberCalculator.CutTimeZero(avgTime)} сек");
+        // Проверяем, что ввод корректен
+        if (!int.TryParse(input, out answer)) 
+        {
+            isFirstAttempt = false;
+            continue;
+        }
+
+        switch (answer)
+        {
+            case 1:
+                ResultMenu.WriteConsole(primesTimes, count);
+                break;
+            case 2:
+                ResultMenu.InFile(primesTimes, count);
+                break;
+            case 3:
+                Console.WriteLine("\nУдачного дня!");
+                break;
+            default:
+                isFirstAttempt = false;
+                continue;
+        }
+
+        break;
+
+    } while (true);
 }
 catch (Exception)
 {

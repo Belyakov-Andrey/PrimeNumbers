@@ -9,7 +9,7 @@ public static class PrimeNumberCalculator
         if (n <= 1) return false;
         if (n == 2) return true;
         if (n % 2 == 0) return false;
-    
+
         int maxDivisor = (int)Math.Sqrt(n) + 1;
         for (int d = 3; d < maxDivisor; d += 2)
         {
@@ -19,10 +19,9 @@ public static class PrimeNumberCalculator
         return true;
     }
 
-    public static (int[] primes, double[] times) FindPrimes(int count)
+    public static Dictionary<int, double> FindPrimes(int count)
     {
-        int[] primes = new int[count];
-        double[] times = new double[count];
+        Dictionary<int, double> primesTimes = new Dictionary<int, double>();
         int current = 2;
         int found = 0;
 
@@ -34,25 +33,13 @@ public static class PrimeNumberCalculator
             if (IsPrime(current))
             {
                 stopwatch.Stop();
-                primes[found] = current;
-                times[found] = stopwatch.Elapsed.TotalSeconds;
+                primesTimes.Add(current, stopwatch.Elapsed.TotalNanoseconds);
                 found++;
             }
 
             current++;
         }
 
-        return (primes, times);
-    }
-    
-    public static string CutTimeZero(double value)
-    {
-        string cutTime = value.ToString(
-            "0.00000000000000000000000000000000000000000");
-        cutTime = cutTime.TrimEnd('0');
-        if (cutTime.EndsWith(",")) 
-            cutTime = cutTime.TrimEnd(',');
-
-        return cutTime;
+        return primesTimes;
     }
 }

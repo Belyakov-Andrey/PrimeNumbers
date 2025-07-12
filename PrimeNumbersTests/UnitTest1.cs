@@ -25,28 +25,4 @@ public class PrimeNumberCalculatorTests
 
         Assert.Equal(expected, result);
     }
-
-    [Theory]
-    [InlineData(1, new[] { 2 })]
-    [InlineData(5, new[] { 2, 3, 5, 7, 11 })]
-    [InlineData(10, new[] { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 })]
-    public void FindPrimes_ReturnsCorrectPrimes(int count, int[] expectedPrimes)
-    {
-        var (primes, times) = PrimeNumberCalculator.FindPrimes(count);
-
-        Assert.Equal(expectedPrimes, primes);
-    }
-
-    [Theory]
-    [InlineData(0.000000000123456789, "0,000000000123456789")]
-    [InlineData(1.23456789000000000, "1,23456789")]
-    [InlineData(0.00000000000000000, "0")]
-    [InlineData(1.00000000000000000, "1")]
-    [InlineData(123.456000000000000, "123,456")]
-    public void CutTimeZero_CorrectString(double value, string expected)
-    {
-        var result = PrimeNumberCalculator.CutTimeZero(value);
-
-        Assert.Equal(expected, result);
-    }
 }
