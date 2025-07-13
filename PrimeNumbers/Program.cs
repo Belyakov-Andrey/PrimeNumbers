@@ -12,55 +12,11 @@ try
         Console.WriteLine("Число должно быть положительным.");
         return;
     }
-    
+
     Dictionary<int, double> primesTimes = new Dictionary<int, double>();
     primesTimes = PrimeNumberCalculator.FindPrimes(count);
 
-    int answer;
-    bool isFirstAttempt = true;
-
-    do
-    {
-        if (isFirstAttempt)
-        {
-            Console.WriteLine("\nКак вы хотите вывести результат?");
-            Console.WriteLine("1 - в консоль");
-            Console.WriteLine("2 - в файл");
-            Console.WriteLine("3 - завершить программу");
-        }
-        else
-        {
-            Console.WriteLine("\nДЛЯ КОГО НАПИСАНО ТО? 1, 2 или 3?");
-        }
-
-        Console.Write("Ваш выбор: ");
-        string input = Console.ReadLine();
-        
-        if (!int.TryParse(input, out answer)) 
-        {
-            isFirstAttempt = false;
-            continue;
-        }
-
-        switch (answer)
-        {
-            case 1:
-                ResultMenu.WriteConsole(primesTimes, count);
-                break;
-            case 2:
-                ResultMenu.InFile(primesTimes, count);
-                break;
-            case 3:
-                Console.WriteLine("\nУдачного дня!");
-                break;
-            default:
-                isFirstAttempt = false;
-                continue;
-        }
-
-        break;
-
-    } while (true);
+    ResultMenu.Menu(primesTimes, count);
 }
 catch (Exception)
 {

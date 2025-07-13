@@ -33,7 +33,7 @@ public static class PrimeNumberCalculator
             if (IsPrime(current))
             {
                 stopwatch.Stop();
-                primesTimes.Add(current, stopwatch.Elapsed.TotalNanoseconds);
+                primesTimes.Add(current, (stopwatch.ElapsedTicks * 1_000_000_000.0) / Stopwatch.Frequency);
                 found++;
             }
 

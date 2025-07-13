@@ -2,65 +2,136 @@
 
 public class ResultMenu
 {
-    public static void WriteConsole(Dictionary<int, double> primesTimes, int count)
-    {
-        string fullReport = GenerateFullReport(primesTimes, count, "нано сек");
-        Console.WriteLine(fullReport);
-    }
-
-    public static void InFile(Dictionary<int, double> primesTimes, int count)
+    public static void Menu(Dictionary<int, double> primesTimes, int count)
     {
         try
         {
-            Console.Write("Введите имя файла для сохранения (например, primes.txt): ");
-            string fileName = Console.ReadLine();
+            int answer;
+            bool isFirstAttempt = true;
 
-            if (string.IsNullOrWhiteSpace(fileName))
+            do
             {
-                Console.WriteLine("Имя файла не может быть пустым.");
-                return;
-            }
-            
-            string appPath = AppDomain.CurrentDomain.BaseDirectory;
-            
-            if (!fileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
-            {
-                fileName += ".txt";
-            }
+                if (isFirstAttempt)
+                {
+                    Console.WriteLine("\nКак вы хотите вывести результат?");
+                    Console.WriteLine("1 - в консоль");
+                    Console.WriteLine("2 - в файл");
+                    Console.WriteLine("3 - завершить программу");
+                }
+                else
+                {
+                    Console.WriteLine("\nДЛЯ КОГО НАПИСАНО ТО? 1, 2 или 3?");
+                }
 
-            string filePath = Path.Combine(appPath, fileName);
+                Console.Write("Ваш выбор: ");
+                string input = Console.ReadLine();
 
-            string fullReport = GenerateFullReport(primesTimes, count, "нано сек");
+                if (!int.TryParse(input, out answer))
+                {
+                    isFirstAttempt = false;
+                    continue;
+                }
 
-            File.WriteAllText(filePath, fullReport);
-            Console.WriteLine($"Данные успешно сохранены в файл: {filePath}");
+                switch (answer)
+                {
+                    case 1:
+                        ResultMenu.WriteConsole(primesTimes, count);
+                        break;
+                    case 2:
+                        ResultMenu.InFile(primesTimes, count);
+                        break;
+                    case 3:
+                        Console.WriteLine("\nУдачного дня!");
+                        break;
+                    default:
+                        isFirstAttempt = false;
+                        continue;
+                }
 
+                break;
+            } while (true);
         }
         catch (Exception)
         {
-            Console.WriteLine("Ошибка при сохранении в файл");
+            Console.WriteLine("Введите целое положительное число.");
         }
     }
 
-    private static string GenerateFullReport(Dictionary<int, double> primesTimes, int count, string timeUnit)
-    {
-        var report = new StringBuilder();
-        double totalTime = 0;
-        int i = 1;
 
-        foreach (var entry in primesTimes)
+    static void WriteConsole(Dictionary<int, double> primesTimes, int count)
         {
-            report.AppendLine($"{i}. простое число: {entry.Key}, время расчета: {entry.Value} {timeUnit}");
-            totalTime += entry.Value;
-            i++;
+            string fullReport = GenerateFullReport(primesTimes, count, "нано сек");
+            Console.WriteLine(fullReport);
         }
 
-        double avgTime = totalTime / count;
-        report.AppendLine("\nИтоговая статистика:")
-            .AppendLine($"Суммарное время: {totalTime} {timeUnit}")
-            .AppendLine($"Среднее время: {avgTime} {timeUnit}")
-            .AppendLine("Здесь могла быть ваша реклама xD");
 
-        return report.ToString();
+        static void InFile(Dictionary<int, double> primesTimes, int count)
+        {
+            try
+            {
+                Console.WriteLine("\nВведите имя файла для сохранения");
+                Console.Write("Название файла: ");
+                string fileName = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    Console.WriteLine("Имя файла не может быть пустым.");
+                    return;
+                }
+
+                if (!fileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                    fileName += ".txt";
+
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string filePath = Path.Combine(desktopPath, fileName);
+
+                if (File.Exists(filePath))
+                {
+                    Console.WriteLine($"\nФайл '{fileName}' уже существует.");
+                    Console.WriteLine("Для перезаписи введите - 1");
+                    Console.WriteLine("Для отмены введите - Любой символ кроме 1");
+                    Console.Write("Ваш выбор: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine();
+
+                    if (input != "1")
+                    {
+                        Console.WriteLine("Сохранение отменено.");
+                        return;
+                    }
+                }
+
+                string fullReport = GenerateFullReport(primesTimes, count, "нано сек");
+
+                File.WriteAllText(filePath, fullReport);
+
+                Console.WriteLine($"Файл сохранён: {filePath}");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Не предвиденная ошибка =(");
+            }
+        }
+
+        static string GenerateFullReport(Dictionary<int, double> primesTimes, int count, string timeUnit)
+        {
+            var report = new StringBuilder();
+            double totalTime = 0;
+            int i = 1;
+
+            foreach (var entry in primesTimes)
+            {
+                report.AppendLine($"{i}. простое число: {entry.Key}, время расчета: {entry.Value} {timeUnit}");
+                totalTime += entry.Value;
+                i++;
+            }
+
+            double avgTime = totalTime / count;
+            report.AppendLine("\nИтоговая статистика:")
+                .AppendLine($"Суммарное время: {totalTime} {timeUnit}")
+                .AppendLine($"Среднее время: {avgTime} {timeUnit}")
+                .AppendLine("Здесь могла быть ваша реклама xD");
+
+            return report.ToString();
+        }
     }
-}
