@@ -22,8 +22,14 @@ public class ResultMenu
                 {
                     Console.WriteLine("\nДЛЯ КОГО НАПИСАНО ТО? 1, 2 или 3?");
                 }
-
-                Console.Write("Ваш выбор: ");
+                
+                // заменил Write на WriteLine из за минибага райдера со скролом консоли
+                Console.WriteLine("Ваш выбор: ");
+                
+                // здесь применяется установление курсора в определенную позицию,
+                // для обхода минибага райдера со скролом консоли
+                Console.SetCursorPosition(11, (Console.CursorTop + -1));
+                
                 string input = Console.ReadLine();
 
                 if (!int.TryParse(input, out answer))
